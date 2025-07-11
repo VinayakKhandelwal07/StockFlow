@@ -1,0 +1,14 @@
+{% extends 'partials/base.html' %}
+{% block title %}Delete Order{% endblock %}
+
+{% block content %}
+<div class="alert alert-danger">
+  <h4>Confirm Deletion</h4>
+  <p>Are you sure you want to delete Order #{{ order.company_order_id }}?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a href="{% url 'dashboard:orders' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

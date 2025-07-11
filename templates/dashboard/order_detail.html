@@ -1,0 +1,121 @@
+{% extends 'partials/base.html' %}
+{% block title %}Order #{{ order.company_order_id }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Order Details - <span class="text-warning">#{{ order.company_order_id }}</span></h4>
+    </div>
+    <div class="card-body">
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+        
+        <p><strong>Company:</strong>
+            {{ order.company.name }}
+          </p>
+          <p><strong>Placed By:</strong>
+            {{ order.staff.get_full_name|default:order.staff.username }}
+          </p>
+           <p><strong>Reviewed By:</strong>
+      {{ order.reviewed_by.get_full_name|default:order.reviewed_by.username|default:"—" }}
+    </p>
+          
+          
+          <p><strong>Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p><strong>Status:</strong>
+            {% if order.order_status|lower == 'pending' %}
+              <span class="badge bg-warning text-dark">{{ order.order_status }}</span>
+            {% elif order.order_status|lower == 'cancelled' %}
+              <span class="badge bg-danger">{{ order.order_status }}</span>
+            {% elif order.order_status|lower == 'completed' or order.order_status|lower == 'complete' %}
+              <span class="badge bg-success">{{ order.order_status }}</span>
+            {% else %}
+              <span class="badge bg-secondary">{{ order.order_status }}</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <h5 class="mt-4 mb-3 border-bottom pb-2">Ordered Items</h5>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Category</th>
+              <th scope="col">Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in order_products %}
+              <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.product.category }}</td>
+                <td>{{ item.quantity }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="3" class="text-center text-muted">No products in this order.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <h5 class="mt-4 mb-3 border-bottom pb-2">Inventory Requests</h5>
+      {% if inventory_requests %}
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Request Type</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Requested By</th>
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for req in inventory_requests %}
+              <tr>
+                <td>{{ req.get_request_type_display }}</td>
+                <td>{{ req.product.name }}</td>
+                <td>{{ req.product.category }}</td>
+                <td>{{ req.quantity }}</td>
+                <td>{{ req.reason|default:"-" }}</td>
+                <td>
+                  {% if req.status == 'PENDING' %}
+                    <span class="badge bg-warning text-dark">{{ req.get_status_display }}</span>
+                  {% elif req.status == 'APPROVED' %}
+                    <span class="badge bg-success">{{ req.get_status_display }}</span>
+                  {% elif req.status == 'REJECTED' %}
+                    <span class="badge bg-danger">{{ req.get_status_display }}</span>
+                  {% else %}
+                    <span class="badge bg-secondary">{{ req.get_status_display }}</span>
+                  {% endif %}
+                </td>
+                <td>{{ req.requested_by.get_full_name|default:req.requested_by.username }}</td>
+                <td>{{ req.created_at|date:"M d, Y H:i" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted">No Inventory Requests found for this order.</p>
+      {% endif %}
+
+      <div class="mt-4 text-end">
+        <a href="{% url 'dashboard:orders' %}" class="btn btn-outline-primary">← Back to Orders</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

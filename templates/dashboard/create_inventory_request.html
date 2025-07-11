@@ -1,0 +1,126 @@
+{% extends 'partials/base.html' %}
+
+{% block title %}Create Inventory Request{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold text-primary">
+      <i class="bi bi-journal-plus"></i> New Inventory Request
+    </h1>
+    <a href="{% url 'dashboard:my_requests' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left-circle"></i> Back to My Requests
+    </a>
+  </div>
+
+  <!-- Alert Messages (Error/Success) -->
+  {% if messages %}
+  <div class="container mb-4">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+      <i class="bi bi-info-circle-fill me-2"></i>
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Inventory Request Form -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form method="POST" id="inventoryRequestForm">
+        {% csrf_token %}
+
+        <!-- Request Type -->
+        <div class="mb-3">
+          <label for="request_type" class="form-label fw-semibold">Request Type <span class="text-danger">*</span></label>
+          <select name="request_type" id="request_type" class="form-select" required>
+            <option value="" disabled selected>Select request type</option>
+            <option value="CUSTOMER_ORDER">Customer Order</option>
+            <option value="RESTOCK">Restock</option>
+          </select>
+        </div>
+
+        <!-- Product Selection -->
+        <div class="mb-3">
+          <label for="product_id" class="form-label fw-semibold">Product <span class="text-danger">*</span></label>
+          <select name="product_id" id="product_id" class="form-select" required>
+            {% for product in products %}
+              <option value="{{ product.id }}" data-available="{{ product.quantity }}">
+                {{ product.name }} (Available: {{ product.quantity }})
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Quantity -->
+        <div class="mb-3">
+          <label for="quantity" class="form-label fw-semibold">Quantity <span class="text-danger">*</span></label>
+          <input type="number" name="quantity" id="quantity" class="form-control" min="1" placeholder="Enter quantity" required>
+          <div id="quantityWarning" class="text-warning mt-2" style="display: none;">Quantity cannot exceed the available stock.</div>
+        </div>
+
+        <!-- Optional Reason -->
+        <div class="mb-3">
+          <label for="reason" class="form-label fw-semibold">Reason (optional)</label>
+          <textarea name="reason" id="reason" class="form-control" rows="3" placeholder="Explain the reason for this request"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-grid">
+          <button type="submit" class="btn btn-success btn-lg">
+            <i class="bi bi-send-plus"></i> Submit Request
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const requestTypeSelect = document.getElementById('request_type');
+  const productSelect = document.getElementById('product_id');
+  const quantityInput = document.getElementById('quantity');
+  const quantityWarning = document.getElementById('quantityWarning');
+
+  function updateQuantityValidation() {
+    const requestType = requestTypeSelect.value;
+    const selectedProduct = productSelect.options[productSelect.selectedIndex];
+    const availableQuantity = parseInt(selectedProduct.getAttribute('data-available'), 10);
+
+    if (requestType === 'CUSTOMER_ORDER') {
+      // Limit quantity to available stock
+      quantityInput.setAttribute('max', availableQuantity);
+      if (quantityInput.value > availableQuantity) {
+        quantityWarning.style.display = 'block';
+      } else {
+        quantityWarning.style.display = 'none';
+      }
+    } else {
+      // For RESTOCK, no max limit
+      quantityInput.removeAttribute('max');
+      quantityWarning.style.display = 'none';
+    }
+  }
+
+  // Update validation when request type or product changes
+  requestTypeSelect.addEventListener('change', updateQuantityValidation);
+  productSelect.addEventListener('change', updateQuantityValidation);
+  quantityInput.addEventListener('input', updateQuantityValidation);
+
+  // Final check on submit
+  document.getElementById('inventoryRequestForm').addEventListener('submit', function(e) {
+    const requestType = requestTypeSelect.value;
+    const selectedProduct = productSelect.options[productSelect.selectedIndex];
+    const availableQuantity = parseInt(selectedProduct.getAttribute('data-available'), 10);
+    const qty = parseInt(quantityInput.value, 10);
+
+    if (requestType === 'CUSTOMER_ORDER' && qty > availableQuantity) {
+      e.preventDefault();
+      alert('Quantity cannot exceed the available stock for Customer Orders.');
+    }
+  });
+</script>
+{% endblock %}

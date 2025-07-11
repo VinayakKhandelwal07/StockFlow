@@ -1,0 +1,22 @@
+{% extends 'partials/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            
+            <h4 class="mb-0">Add New Product</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="mt-3 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success">Save Product</button>
+                    <a href="{% url 'dashboard:products' %}" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

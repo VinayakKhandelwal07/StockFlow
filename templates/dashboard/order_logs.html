@@ -1,0 +1,132 @@
+{% extends 'partials/base.html' %}
+
+{% block title %}Order Logs{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">📑 Order Logs</h1>
+    <a href="{% url 'dashboard:orders' %}" class="btn btn-outline-dark btn-sm">
+      <i class="bi bi-arrow-left-circle me-1"></i> Back to Orders
+    </a>
+  </div>
+
+  {% if logs %}
+  <div class="table-responsive shadow rounded bg-white">
+    <table class="table table-hover align-middle text-nowrap">
+      <thead class="table-light">
+        <tr>
+          <th>🕒 Timestamp</th>
+          <th>👤 Performed By</th>
+          <th>⚙️ Action</th>
+          <th>📦 Order</th>
+          <th>📝 Summary</th>
+          <th class="text-center">🔍 View</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr class="{% if log.action|lower == 'deleted' %}table-danger{% endif %}">
+
+          <!-- Timestamp -->
+          <td>{{ log.timestamp|date:"M d, Y H:i" }}</td>
+
+          <!-- Performed By -->
+          <td>
+            {% if log.user %}
+              <span title="{{ log.user.email }}" class="d-flex align-items-center gap-1">
+                <i class="bi bi-person text-primary"></i>
+                {{ log.user.get_full_name|default:log.user.username }}
+              </span>
+            {% else %}
+              <span class="text-muted fst-italic">Unknown</span>
+            {% endif %}
+          </td>
+
+          <!-- Action -->
+          <td>
+            {% with log.action|lower as action %}
+              <span class="badge 
+                {% if action == 'created' %} bg-success 
+                {% elif action == 'updated' %} bg-warning text-dark 
+                {% elif action == 'deleted' %} bg-danger 
+                {% elif action == 'approved' %} bg-primary 
+                {% elif action == 'rejected' %} bg-danger 
+                {% else %} bg-secondary 
+                {% endif %}">
+                {{ action|capfirst }}
+              </span>
+            {% endwith %}
+          </td>
+
+          <!-- Order -->
+          <td>
+            <span class="{% if log.order %}fw-semibold text-dark{% else %}text-muted{% endif %}">
+              #{{ log.object_id }}{% if not log.order %} (Deleted){% endif %}
+            </span>
+          </td>
+
+          <!-- Summary -->
+          <td style="max-width: 300px;">
+            {% if log.summary %}
+              <div class="text-wrap text-break">{{ log.summary }}</div>
+            {% else %}
+              <span class="text-muted fst-italic">No summary</span>
+            {% endif %}
+          </td>
+
+          <!-- View Button -->
+          <td class="text-center">
+            {% if log.order %}
+              <a href="{% url 'dashboard:order_detail' log.order.pk %}" target="_blank"
+                 class="btn btn-sm btn-outline-primary" title="View Order" rel="noopener noreferrer">
+                <i class="bi bi-eye"></i>
+                <span class="visually-hidden">View Order</span>
+              </a>
+            {% else %}
+              <button type="button" class="btn btn-sm btn-outline-secondary" disabled
+                      title="Order deleted" aria-disabled="true" tabindex="-1"
+                      style="cursor: not-allowed;">
+                <i class="bi bi-slash-circle"></i>
+                <span class="visually-hidden">Order deleted</span>
+              </button>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <nav aria-label="Pagination" class="mt-4">
+    <ul class="pagination justify-content-center flex-wrap gap-2">
+      {% if logs.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ logs.previous_page_number }}">&laquo;</a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+      {% endif %}
+
+      {% for num in logs.paginator.page_range %}
+        {% if logs.number == num %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num > logs.number|add:"-3" and num < logs.number|add:"3" %}
+          <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+      {% endfor %}
+
+      {% if logs.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ logs.next_page_number }}">&raquo;</a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      No order logs found for your company.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

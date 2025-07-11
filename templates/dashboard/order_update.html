@@ -1,0 +1,95 @@
+{% extends 'partials/base.html' %}
+{% load custom_filters %}
+
+{% block title %}Update Order #{{ order.company_order_id}}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">
+        <i class="bi bi-pencil-square me-2"></i> Update Order #{{ order.company_order_id }}
+      </h4>
+      <span class="badge bg-light text-dark">{{ order.order_status|default:"Pending" }}</span>
+    </div>
+
+    <div class="card-body">
+
+      {% if messages %}
+        <div class="mb-4">
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+
+        <!-- 🧾 Inventory Requests Section -->
+        <div class="mb-4">
+          <h5 class="mb-3">Inventory Requests</h5>
+          <div class="row g-3">
+            {% for req in order.inventory_requests.all %}
+              <div class="col-md-6 col-lg-4">
+                <div class="card border-0 bg-light h-100">
+                  <div class="card-body">
+                    <h6 class="card-title fw-bold text-dark mb-2">
+                      <i class="bi bi-box"></i> {{ req.product.name }}
+                    </h6>
+                    <p class="mb-1"><strong>Category:</strong> {{ req.product.category }}</p>
+                    <p class="mb-1"><strong>Request Type:</strong> {{ req.request_type|title }}</p>
+                    <p class="mb-1"><strong>Requested:</strong> {{ req.quantity }} pcs</p>
+                    <p class="mb-0"><strong>Stock Left:</strong> {{ req.product.quantity }} pcs</p>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <div class="col-12 text-muted">No inventory requests found in this order.</div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- 🚦 Order Status Selector -->
+        <div class="mb-4">
+          <label for="order-status" class="form-label fw-semibold">Order Status</label>
+
+          {% if order.order_status == 'Completed' %}
+            <select id="order-status" name="order_status" class="form-select" disabled>
+              <option selected>Completed</option>
+            </select>
+            <div class="form-text text-danger mt-2">
+              <i class="bi bi-exclamation-circle-fill me-1"></i>
+              This order has been marked as <strong>Completed</strong> and can no longer be changed.
+            </div>
+          {% else %}
+            <select id="order-status" name="order_status" class="form-select" required>
+              <option value="Pending" {% if order.order_status == 'Pending' or not order.order_status %}selected{% endif %}>Pending</option>
+              <option value="Processed" {% if order.order_status == 'Processed' %}selected{% endif %}>Processed</option>
+              <option value="Shipped" {% if order.order_status == 'Shipped' %}selected{% endif %}>Shipped</option>
+              <option value="Completed" {% if order.order_status == 'Completed' %}selected{% endif %}>Completed</option>
+            </select>
+          {% endif %}
+        </div>
+
+        <!-- 🔘 Actions -->
+        <div class="d-flex justify-content-between align-items-center">
+          <a href="{% url 'dashboard:orders' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Back to Orders
+          </a>
+          {% if order.order_status != 'Completed' %}
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-save2"></i> Update Status
+            </button>
+          {% else %}
+            <button class="btn btn-secondary" disabled>
+              <i class="bi bi-lock-fill"></i> Locked
+            </button>
+          {% endif %}
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

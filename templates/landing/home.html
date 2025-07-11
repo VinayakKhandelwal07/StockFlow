@@ -1,0 +1,463 @@
+{% load static %}
+{% load form_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockFlow - Free Staff & Inventory Management for Small Business</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <div class="brand-icon me-2">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <span class="fw-bold fs-4">StockFlow</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                        <a class="nav-link" href="#hero-section">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#benefits">Benefits</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact-form">Contact</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);" onclick="showDemoCredentials()">Try Demo</a>
+                    </li>
+
+                </ul>
+                
+                <div class="d-flex">
+                   <a class="btn btn-outline-primary me-2" href="{% url 'user:login' %}">Sign In</a>
+<a class="btn btn-outline-primary me-2" href="{% url 'user:register' %}">Get Started Free</a>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+<!-- Hero Section -->
+<section id="hero-section" class="hero-section position-relative">
+  <div class="container">
+    <div class="row align-items-center min-vh-100 py-5">
+
+      <!-- Top Trust Banner -->
+      <div class="col-12 text-center mb-4">
+        <div class="trust-banner d-inline-flex align-items-center mx-auto px-4 py-2 rounded-pill fw-semibold shadow-sm" style="color: var(--primary-color); border: 1.5px solid var(--primary-color); background-color: #f8f9fa;">
+          <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 0c-.69 0-1.337.136-1.91.383a6.016 6.016 0 0 0-2.763 1.983C2.4 4.095 2 5.39 2 7c0 3.732 2.468 7.213 6 8 3.532-.787 6-4.268 6-8 0-1.61-.4-2.905-1.327-3.634a6.02 6.02 0 0 0-2.763-1.983A5.992 5.992 0 0 0 8 0zm.854 6.646-3 3a.5.5 0 0 1-.708-.708l2.647-2.646-1.647-1.646a.5.5 0 1 1 .708-.708l1.646 1.647 3.647-3.647a.5.5 0 0 1 .708.708l-4 4z"/>
+          </svg>
+          PERFECT FOR INDIAN SMBS — FREE, RELIABLE & EASY TO USE
+        </div>
+        <p class="trust-subtext text-center mt-2 mb-0 text-muted fst-italic small">
+          Trusted by thousands to streamline operations, reduce costs, and accelerate business growth.
+        </p>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="hero-content">
+          <h1 class="display-3 fw-bold mb-4">
+            Simplify Your Business.<br>
+            <span class="text-primary">Amplify Your Success.</span>
+          </h1>
+
+          <p class="lead mb-4 text-secondary">
+            StockFlow is built exclusively for Indian small and midsize businesses to offer <span class="fw-semibold text-primary">seamless inventory & staff management</span> without hidden fees or complexity. Your trusted partner to <span class="fw-semibold text-primary">grow smarter</span> and operate smoother.
+          </p>
+          <p class="lead mb-3 text-secondary">New to StockFlow? Start your company account for free.</p>
+
+          <!-- Get Started Button -->
+<div class="mb-3">
+  <a href="{% url 'user:register' %}" class="btn btn-primary btn-md px-4 py-2 rounded-pill shadow-sm">
+    <i class="bi bi-briefcase-fill me-2"></i>
+    Get Started — Create Your Company
+  </a>
+</div>
+
+<!-- Try Demo Button -->
+
+<p class="text-secondary mb-4 fs-4">
+  Wanna try the demo? Experience StockFlow’s features for free before you get started. 
+  </p>
+<div>
+  <button class="btn btn-primary btn-md px-4 py-2 rounded-pill shadow-sm" onclick="toggleDemoCredentials()">
+    <i class="bi bi-eye me-2"></i>
+    Try Demo Now
+  </button>
+</div>
+    
+
+          
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <!-- Removed Product Demo Image -->
+        <div class="hero-image-container position-relative">
+          <div class="hero-image rounded-4 shadow-lg p-4 bg-white">
+            <div class="demo-placeholder d-flex flex-column align-items-center justify-content-center" style="aspect-ratio: 16/9; border-radius: 12px; background: linear-gradient(135deg, #e3f2fd 0%, #e8f5e8 100%);">
+              <i class="bi bi-box-arrow-in-right display-1 text-success"></i>
+              <p class="mt-3 fw-semibold text-success">Experience the Demo</p>
+            </div>
+          </div>
+          <div class="floating-element floating-1"></div>
+          <div class="floating-element floating-2"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Demo Credentials Section (Initially Hidden) -->
+  <div id="demo-credentials" class="card shadow-sm border border-success mt-3 d-none">
+    <div class="card-body">
+      <h5 class="card-title fw-bold text-success mb-3">Demo Login Credentials</h5>
+
+      <p class="mb-2"><strong>Admin Account:</strong></p>
+      <div class="bg-light border p-2 mb-3 rounded">
+        <div><strong>username:</strong> demo@admin</div>
+        <div><strong>Password:</strong> admin123</div>
+      </div>
+
+      <p class="mb-2"><strong>Manager Account:</strong></p>
+      <div class="bg-light border p-2 mb-3 rounded">
+        <div><strong>username:</strong> demo@manager</div>
+        <div><strong>Password:</strong> manager123</div>
+      </div>
+
+      <p class="mb-2"><strong>Staff Account:</strong></p>
+      <div class="bg-light border p-2 mb-3 rounded">
+        <div><strong>username:</strong> demo@staff</div>
+        <div><strong>Password:</strong> staff123</div>
+      </div>
+
+      <p class="text-muted small">Use these credentials on the login page to explore the system.</p>
+      <a href="{% url 'user:login' %}" class="btn btn-outline-primary me-2">Go to Login Page</a>
+
+                  <button class="btn btn-outline-primary me-2" onclick="toggleDemoCredentials()">Hide</button>
+
+    </div>
+  </div>
+</section>
+
+
+
+   <!-- Features Section -->
+<section id="features" class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-4 fw-bold mb-4">Powerful Features Designed for Your Business</h2>
+                <p class="lead text-muted">Multi-company, role-based control, and seamless order workflows made simple and secure.</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Multi-Company Support</h4>
+                    <p class="text-muted">Each company acts as a separate tenant, keeping data secure and isolated.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Role-Based Access Control</h4>
+                    <p class="text-muted">Admins, Managers, and Staff each have tailored permissions for secure data access.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Order & Request Workflows</h4>
+                    <p class="text-muted">Employees create order requests that managers approve or reject, streamlining operations.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Automatic Stock Updates</h4>
+                    <p class="text-muted">Stock quantities adjust automatically upon order completion using signal-driven updates.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">First Login Password Enforcement</h4>
+                    <p class="text-muted">Users must update their initial password on first login to ensure security.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-journal-text"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Comprehensive Audit & Logs</h4>
+                    <p class="text-muted">Track all order activities and status changes for full accountability.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+  <!-- Benefits Section -->
+<section id="benefits" class="py-5 bg-gradient">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto text-center mb-5">
+        <h2 class="display-4 fw-bold mb-4 section-heading">Built for Small & Mid-Sized Business Success</h2>
+        <p class="lead section-paragraph">
+          Simplify inventory and staff management with a system designed to replace complex, error-prone manual processes.
+        </p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="benefit-card text-center">
+          <div class="benefit-icon">
+            <i class="bi bi-speedometer2"></i>
+          </div>
+          <div class="benefit-stat">Faster</div>
+          <h4 class="fw-bold benefit-heading mb-2">Streamlined Operations</h4>
+          <p class="benefit-paragraph">Save time with automated workflows and easy-to-use tools that keep your business moving.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="benefit-card text-center">
+          <div class="benefit-icon">
+            <i class="bi bi-shield-lock-fill"></i>
+          </div>
+          <div class="benefit-stat">Secure</div>
+          <h4 class="fw-bold benefit-heading mb-2">Role-Based Data Protection</h4>
+          <p class="benefit-paragraph">Protect your company’s data with strict permissions and company-level isolation.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="benefit-card text-center">
+          <div class="benefit-icon">
+            <i class="bi bi-graph-up-arrow"></i>
+          </div>
+          <div class="benefit-stat">Accurate</div>
+          <h4 class="fw-bold benefit-heading mb-2">Reliable Stock Management</h4>
+          <p class="benefit-paragraph">Keep your inventory up-to-date automatically and avoid costly stock errors.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="benefit-card text-center">
+          <div class="benefit-icon">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="benefit-stat">User-Friendly</div>
+          <h4 class="fw-bold benefit-heading mb-2">Simple for Teams</h4>
+          <p class="benefit-paragraph">Easy onboarding and a clean interface tailored for small to mid-size teams, no tech expertise needed.</p>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Contact Us Section -->
+<section id="contact-form" class="py-5 bg-light">
+  <div class="container">
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-8 text-center">
+        <h2 class="fw-bold display-5 mb-3">Get in Touch</h2>
+        <p class="lead text-muted">Have questions or want to learn more? We'd love to hear from you.</p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+
+        {% if messages %}
+          {% for message in messages %}
+            {% if "success" in message.tags %}
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% elif "error" in message.tags %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="row g-3">
+
+            <div class="col-md-6">
+              {{ form.name.label_tag }}
+              {{ form.name|add_class:"form-control" }}
+              {% for error in form.name.errors %}
+                <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.email.label_tag }}
+              {{ form.email|add_class:"form-control" }}
+              {% for error in form.email.errors %}
+                <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="col-12">
+              {{ form.subject.label_tag }}
+              {{ form.subject|add_class:"form-control" }}
+              {% for error in form.subject.errors %}
+                <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="col-12">
+              {{ form.message.label_tag }}
+              {{ form.message|add_class:"form-control" }}
+              {% for error in form.message.errors %}
+                <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-primary btn-lg px-5 mt-3">Send Message</button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+   <footer id="contact" class="bg-dark text-white py-5">
+  <div class="container">
+    <div class="row align-items-center gy-4">
+      <!-- Branding & Contact -->
+      <div class="col-md-6">
+       <div class="navbar-brand d-flex align-items-center mb-3 text-white text-decoration-none" href="#">
+  <div class="brand-icon me-2">
+    <i class="bi bi-people-fill"></i>
+  </div>
+  <span class="fw-bold fs-4">StockFlow</span>
+</div>
+
+        <p class="text-white-50 mb-4">
+          Empowering small and midsize businesses with simple, powerful staff and inventory management tools.
+        </p>
+       <div class="d-flex flex-column flex-sm-row gap-sm-4 text-white-50 small">
+  <div><i class="bi bi-envelope me-2"></i>hello@StockFlow.com</div>
+  <div><i class="bi bi-telephone me-2"></i>1-800-StockFlow</div>
+  <div><i class="bi bi-geo-alt me-2"></i>Love from India  ❤️ </div>
+</div>
+
+
+      </div>
+
+      <!-- Social Media -->
+      <div class="col-md-6 text-md-end">
+        <h5 class="fw-semibold mb-3">Join Our Community</h5>
+        <div class="d-inline-flex gap-3">
+          <a href="https://www.linkedin.com/company/StockFlow" target="_blank" aria-label="LinkedIn" class="social-btn">
+            <i class="bi bi-linkedin"></i>
+          </a>
+          <a href="https://www.instagram.com/StockFlow" target="_blank" aria-label="Instagram" class="social-btn">
+            <i class="bi bi-instagram"></i>
+          </a>
+          <a href="https://twitter.com/StockFlow" target="_blank" aria-label="Twitter" class="social-btn">
+            <i class="bi bi-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4 border-secondary">
+
+    <div class="row">
+      <div class="col-md-6">
+        <p class="text-white-50 mb-0 small">© 2025 StockFlow. All rights reserved.</p>
+      </div>
+      <div class="col-md-6 text-md-end mt-3 mt-md-0">
+        <a href="#" class="text-white-50 small text-decoration-none">Privacy Policy</a>
+        <span class="text-white-50 px-2">|</span>
+        <a href="#" class="text-white-50 small text-decoration-none">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+  function toggleDemoCredentials() {
+    const section = document.getElementById("demo-credentials");
+    section.classList.toggle("d-none");
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+</script>
+
+<script>
+  function toggleDemoCredentials() {
+    const section = document.getElementById("demo-credentials");
+    section.classList.toggle("d-none");
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function showDemoCredentials() {
+    const section = document.getElementById("demo-credentials");
+    if (section.classList.contains("d-none")) {
+      section.classList.remove("d-none");
+    }
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+</script> 
+</body>
+</html>

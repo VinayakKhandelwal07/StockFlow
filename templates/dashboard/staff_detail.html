@@ -1,0 +1,64 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block title %}Staff Details - {{ staff.user.get_full_name|default:"Unnamed Staff" }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="row g-0">
+
+                    <!-- Profile Picture -->
+                    <div class="col-md-4 bg-light d-flex align-items-center justify-content-center p-4">
+                        <img 
+                            src="{% if staff.profile_picture %}{{ staff.profile_picture.url }}{% else %}{% static 'img/default_profile.png' %}{% endif %}" 
+                            alt="{{ staff.user.get_full_name|default:'Unnamed' }}" 
+                            class="img-fluid rounded-circle border border-4 border-primary" 
+                            style="max-width: 180px;"
+                        >
+                    </div>
+
+                    <!-- Staff Info -->
+                    <div class="col-md-8 bg-white">
+                        <div class="card-body p-4">
+                            <h2 class="fw-bold text-primary mb-3">
+                                {{ staff.user.get_full_name|default:"Unnamed Staff" }}
+                            </h2>
+
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2">
+                                    <i class="bi bi-envelope-fill text-secondary me-2"></i>
+                                    <strong>Email:</strong> {{ staff.user.email|default:"N/A" }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-telephone-fill text-secondary me-2"></i>
+                                    <strong>Phone:</strong> {{ staff.phone|default:"N/A" }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-briefcase-fill text-secondary me-2"></i>
+                                    <strong>Role:</strong> {{ staff.user.get_role_display|default:"N/A" }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-geo-alt-fill text-secondary me-2"></i>
+                                    <strong>Address:</strong> {{ staff.address|default:"N/A" }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-calendar-check-fill text-secondary me-2"></i>
+                                    <strong>Join Date:</strong> {{ staff.join_date|date:"F j, Y"|default:"N/A" }}
+                                </li>
+                            </ul>
+
+                            <a href="{% url 'dashboard:staffs' %}" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-arrow-left-circle me-2"></i> Back to Staff List
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

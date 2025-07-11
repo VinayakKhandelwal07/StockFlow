@@ -1,0 +1,58 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <!-- Centered company header in blue -->
+    <h4 class="text-center text-primary mb-4" style="font-weight: 500;">
+        {% if user.company %}
+            {{ user.company.name }}’s Employee Profile
+        {% else %}
+            Your Profile
+        {% endif %}
+    </h4>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        toastElList.forEach(toastEl => new bootstrap.Toast(toastEl).show())
+      })
+    </script>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+            <div class="card shadow-sm rounded-4 border-0">
+                <div class="card-body text-center py-5 px-3 px-sm-4">
+
+                    <img 
+                        src="{% if user.staff and user.staff.profile_picture %}{{ user.staff.profile_picture.url }}{% else %}{% static 'img/default_profile.png' %}{% endif %}" 
+                        alt="Profile Picture" 
+                        class="rounded-circle mb-4 border border-3 border-primary mx-auto d-block"
+                        style="width: 150px; height: 150px; object-fit: cover; object-position: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
+                    />
+
+                    <!-- Username -->
+                    <h5 class="card-title mb-3 text-secondary">{{ user.username }}</h5>
+
+                    <p class="mb-2"><strong>Email:</strong> {{ user.email }}</p>
+                    <p class="mb-2"><strong>Phone:</strong> {{ user.staff.phone|default:"Not provided" }}</p>
+                    <p class="mb-2"><strong>Address:</strong> {{ user.staff.address|default:"Not provided" }}</p>
+                    <p class="mb-2"><strong>Role:</strong> {{ user.get_role_display|default:"Employee" }}</p>
+
+                    <p class="mb-4 text-muted"><small><strong>Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</small></p>
+
+                    <a href="{% url 'user:profile_update' %}" class="btn btn-outline-primary px-4 py-2 fw-semibold">
+                        Edit Profile
+                    </a>
+                    <a href="{% url 'dashboard:index' %}" class="btn btn-outline-primary px-4 py-2 fw-semibold">
+                       <i class="bi bi-arrow-left me-1"></i>Back 
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

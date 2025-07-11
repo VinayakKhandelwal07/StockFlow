@@ -1,0 +1,58 @@
+{% extends 'partials/base.html' %}
+{% block title %}Delete Inventory Request{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h3 class="text-danger mb-3">Confirm Deletion</h3>
+      <p>Are you sure you want to delete the following request?</p>
+
+      <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item">
+          <strong>Request ID:</strong> #{{ request_obj.id }}
+        </li>
+        <li class="list-group-item">
+          <strong>Product:</strong> {{ request_obj.product.name }}
+        </li>
+        <li class="list-group-item">
+          <strong>Quantity:</strong> {{ request_obj.quantity }}
+        </li>
+        <li class="list-group-item">
+          <strong>Request Type:</strong>
+          {% if request_obj.request_type == "RESTOCK" %}
+            <span class="badge bg-info text-dark">Restock</span>
+          {% else %}
+            <span class="badge bg-primary">Customer Order</span>
+          {% endif %}
+        </li>
+        <li class="list-group-item">
+          <strong>Status:</strong>
+          {% if request_obj.status == "PENDING" %}
+            <span class="badge bg-warning text-dark">Pending</span>
+          {% elif request_obj.status == "APPROVED" %}
+            <span class="badge bg-success">Approved</span>
+          {% elif request_obj.status == "REJECTED" %}
+            <span class="badge bg-danger">Rejected</span>
+          {% endif %}
+        </li>
+        <li class="list-group-item">
+          <strong>Requested On:</strong> {{ request_obj.created_at|date:"M d, Y H:i" }}
+        </li>
+      </ul>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="d-flex justify-content-between">
+          <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Yes, Delete Request
+          </button>
+          <a href="{% url 'dashboard:my_requests' %}" class="btn btn-secondary">
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

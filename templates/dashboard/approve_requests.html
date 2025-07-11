@@ -1,0 +1,95 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load tz %}
+
+{% block content %}
+<div class="container py-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Inventory Requests</h2>
+    <a href="{% url 'dashboard:orders' %}" class="btn btn-outline-secondary btn-sm shadow-sm">
+      <i class="bi bi-arrow-left-circle me-1"></i> Back to Orders
+    </a>
+  </div>
+  <hr>
+
+  <!-- Inventory Requests Table -->
+  {% if requests %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Requested By</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for req in requests %}
+          <tr>
+            <td>{{ req.company_request_id  }}</td>
+            <td>{{ req.get_request_type_display }}</td>
+            <td>{{ req.product.name }}</td>
+            <td>
+              {% if req.status == "PENDING" %}
+              <form method="post" action="{% url 'dashboard:approve_inventory_request' req.pk %}" class="d-flex align-items-center gap-2 mb-0">
+                {% csrf_token %}
+                <input type="number" name="new_quantity" value="{{ req.quantity }}" min="1"
+                       class="form-control form-control-sm" style="max-width: 90px;" aria-label="Quantity for approval">
+                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+              </form>
+              {% else %}
+                {{ req.quantity }}
+              {% endif %}
+            </td>
+            <td>{{ req.requested_by.get_full_name|default:req.requested_by.username }}</td>
+            <td>
+              <span class="badge 
+                {% if req.status == 'PENDING' %}bg-warning text-dark
+                {% elif req.status == 'APPROVED' %}bg-success
+                {% elif req.status == 'REJECTED' %}bg-danger
+                {% else %}bg-secondary
+                {% endif %}">
+                {{ req.get_status_display }}
+              </span>
+            </td>
+            <td>{{ req.created_at|localtime|date:"Y-m-d H:i" }}</td>
+            <td class="text-center">
+              <div class="d-flex flex-column align-items-center gap-1">
+
+                {% if req.status == "PENDING" %}
+                <form method="post" action="{% url 'dashboard:reject_inventory_request' req.pk %}" class="mb-0">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                </form>
+                {% endif %}
+
+                {% if user.role in 'Admin Manager' %}
+                <form method="post" action="{% url 'dashboard:delete_inventory_request' req.pk %}" class="mb-0">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-outline-danger btn-sm"
+                          onclick="return confirm('Delete request #{{ req.id }}?');">
+                    Delete
+                  </button>
+                </form>
+                {% endif %}
+
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">No inventory requests found.</div>
+  {% endif %}
+
+</div>
+{% endblock %}

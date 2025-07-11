@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.python-version
+
+# Django
+*.log
+*.pot
+*.pyc
+*.sqlite3
+db.sqlite3  # Ignore SQLite DB file if used in development (not needed with PostgreSQL)
+.env  # Ignore .env file storing sensitive environment variables
+__pycache__/
+media/
+staticfiles/
+static/
+
+# VS Code
+.vscode/
+
+# Virtual environment
+venv/
+.env/
+.venv/
+env/
+ENV/
+
+# PostgreSQL (No need to ignore DB files as PostgreSQL manages them outside of the project)
+# But you may want to exclude backup or dump files created manually:
+*.sql  # Ignore any SQL dump files
+__pycache__/
+*.pyc
+*.sqlite3
+*.log
+db.sqlite3
+.env
+*.env
+/media/
+/staticfiles/
+venv/
+.idea/
+asert/

@@ -1,0 +1,144 @@
+{% extends 'partials/base.html' %}
+{% block title %}Staff Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+<h1 class="fw-bold text-primary">
+  Staff Members of {{ company_name }}
+</h1>
+
+
+
+  {% if user_role == 'admin' %}
+    <a href="{% url 'dashboard:staff_add' %}" class="btn btn-primary shadow-sm">
+      <i class="bi bi-plus-lg me-2"></i> Add Staff
+    </a>
+  {% elif user_role == 'manager' %}
+    <div class="alert alert-info mb-0 py-2 px-3" role="alert">
+      <i class="bi bi-info-circle"></i> Managers cannot add staff.
+    </div>
+  {% endif %}
+</div>
+
+<!-- Staff Count -->
+<div class="mb-4">
+  <h5>Total Staff Members: <span class="badge bg-primary">{{ staff_count }}</span></h5>
+</div>
+
+<!-- Search and Filter -->
+<div class="row mb-3">
+  <div class="col-md-6">
+    <form method="get" class="d-flex">
+      <input type="text" name="search" value="{{ search_query }}" class="form-control rounded-start shadow-sm" placeholder="Search by name">
+      <button type="submit" class="btn btn-outline-primary rounded-end">Search</button>
+    </form>
+  </div>
+  <div class="col-md-4 mt-2 mt-md-0">
+    <form method="get">
+      <select name="role" class="form-select shadow-sm" onchange="this.form.submit()">
+        <option value="" {% if not role_filter %}selected{% endif %}>Filter by Role</option>
+        {% for role_value, role_name in roles %}
+          <option value="{{ role_value }}" {% if role_value == role_filter %}selected{% endif %}>{{ role_name }}</option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+</div>
+
+<!-- Staff Table -->
+<div class="table-responsive shadow-sm rounded-3 bg-white p-3">
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Username</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Role</th>
+        <th>Phone</th>
+        <th>Address</th>
+        {% if user_role == 'admin' or user_role == 'manager' %}
+          <th class="text-center" style="width: 160px;">Actions</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for staff in page_obj %}
+        <tr>
+          <td>{{ staff.user.username }}</td>
+          <td>{{ staff.user.first_name }}</td>
+          <td>{{ staff.user.last_name }}</td>
+          <td>{{ staff.user.get_role_display }}</td>
+          <td>{{ staff.phone }}</td>
+          <td>{{ staff.address }}</td>
+          {% if user_role == 'admin' or user_role == 'manager' %}
+            <td class="text-center">
+              <div class="d-flex justify-content-center gap-2 flex-wrap">
+                <!-- View allowed for Admin & Manager -->
+                <a href="{% url 'dashboard:staff_detail' staff.id %}" class="btn btn-sm btn-outline-success" title="View">
+                  <i class="bi bi-eye"></i>
+                </a>
+
+                <!-- Edit allowed for Admin & Manager -->
+                <a href="{% url 'dashboard:staff_edit' staff.id %}" class="btn btn-sm btn-outline-primary" title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </a>
+
+                <!-- Delete allowed ONLY for Admin -->
+                {% if user_role == 'admin' %}
+                  <a href="{% url 'dashboard:staff_delete' staff.id %}" class="btn btn-sm btn-outline-danger" title="Delete"
+                     onclick="return confirm('Are you sure you want to delete {{ staff.user.get_full_name }}?');">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                {% endif %}
+              </div>
+            </td>
+          {% endif %}
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="7" class="text-center text-muted py-4">
+            No staff members found.
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<nav aria-label="Page navigation" class="mt-4">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if role_filter %}&role={{ role_filter }}{% endif %}" aria-label="Previous">
+          &laquo;
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+      {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if role_filter %}&role={{ role_filter }}{% endif %}">{{ num }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if role_filter %}&role={{ role_filter }}{% endif %}" aria-label="Next">
+          &raquo;
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+{% endblock %}

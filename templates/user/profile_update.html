@@ -1,0 +1,70 @@
+{% extends 'partials/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Update Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4 p-4">
+                <h2 class="text-primary fw-bold mb-4 text-center">
+                    <i class="bi bi-pencil-square me-2"></i>Update Your Profile
+                </h2>
+                 <a href="{% url 'user:profile' %}" class="btn btn-primary px-4 py-2 fw-semibold">
+                        <i class="bi bi-arrow-left me-1"></i>Back
+                    </a>
+
+                
+ 
+
+
+
+
+                <form method="POST" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Username Display -->
+                    <div class="mb-4">
+                        <label for="username" class="form-label fw-semibold">Username</label>
+                        <input type="text" class="form-control" id="username" value="{{ user.username }}" readonly disabled>
+                        <div class="form-text">Your username cannot be changed.</div>
+                    </div>
+
+                    <!-- Individual form fields to control layout and order -->
+                    <div class="mb-4">
+                        {{ form.first_name|as_crispy_field }}
+                        {{ form.last_name|as_crispy_field }}
+                        {{ form.email|as_crispy_field }}
+                        {{ form.phone|as_crispy_field }}
+                        {{ form.address|as_crispy_field }}
+                        {{ form.profile_picture|as_crispy_field }}
+                    </div>
+
+                    <!-- Optional password change fields -->
+                    <hr class="my-4">
+                    <h5 class="text-warning fw-bold mb-3">
+                        <i class="bi bi-shield-lock-fill me-1"></i>Change Password
+                    </h5>
+
+                    <div class="mb-4">
+                        {{ form.old_password|as_crispy_field }}
+                        {{ form.password|as_crispy_field }}
+                        {{ form.confirm_password|as_crispy_field }}
+                    </div>
+
+                    <div class="form-text mb-2">
+                        <i class="bi bi-info-circle me-1"></i>It's recommended to change your password after your first login.
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3">
+                        <i class="bi bi-save me-2"></i>Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
