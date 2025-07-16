@@ -28,11 +28,13 @@ StockFlow is a full-featured, Django-based inventory management system designed 
 
 StockFlow is built for organizations needing multi-role inventory systems with isolated company data. It ensures each business (tenant) can operate independently while sharing a single deployed application instance.
 
+
 ### 🌐 Multi-Tenant Architecture
 
 - Each registered company acts as a **separate tenant**.
 - Data isolation ensures users can only access resources within their company.
 - Super Admin or platform owner manages onboarding, while each company manages its own users.
+
 
 ### 👥 User Roles
 
@@ -43,6 +45,7 @@ StockFlow is built for organizations needing multi-role inventory systems with i
 | Staff  | Create requests(Restock Or Customer Order), view their own requests, update profile |
 
 ---
+
 ## 🧾 Order Management Workflow
 
 1. **Request Creation** (by Staff)
@@ -56,6 +59,7 @@ StockFlow is built for organizations needing multi-role inventory systems with i
 - Order states are strictly validated and enforced (Pending → Approved → Fulfilled).
 
 ---
+
 ## 🐳 Deployment & DevOps
 
 To prepare for deployment:
@@ -66,6 +70,7 @@ To prepare for deployment:
 4. **HTTPS & Domain Setup** – Production-ready hosting via Heroku, AWS, or DigitalOcean
 
 ---
+
 ## 🛠️ Tech Stack
 
 - **Backend**: Django 4.x
@@ -87,6 +92,7 @@ This project is licensed under the MIT License.
 Have questions or suggestions?
 
 📧 Email: stockflowhello@gmail.com
+
 🌐 Website: Coming Soon
 
 ---
