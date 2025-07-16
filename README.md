@@ -77,18 +77,25 @@ To prepare for deployment:
 
 ---
 📄 License
+
 This project is licensed under the MIT License.
 
+---
 
 📬 Contact
+
 Have questions or suggestions?
 
 📧 Email: stockflowhello@gmail.com
 🌐 Website: Coming Soon
 
+---
+
 
 👨‍💻 Developed By
+
 Vinayak Khandelwal
+
 📧 Email: vinayakkhandelwal34@gmail.com
 
 ---
